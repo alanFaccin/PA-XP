@@ -1,0 +1,40 @@
+@startuml Level2
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!define FirebasePuml https://raw.githubusercontent.com/k2wanko/firebase-icons-plantuml/master/plantuml
+!includeurl FirebasePuml/FirebaseCommon.puml
+!includeurl FirebasePuml/FirebaseAll.puml
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/mongodb.puml
+!include DEVICONS/ionic.puml
+!include DEVICONS/firebase.puml
+!include FONTAWESOME/users.puml
+
+title Diagrama de contêineres para o Sistema GreenBee
+
+SHOW_PERSON_OUTLINE()
+LAYOUT_LEFT_RIGHT()
+
+Person(client, "Meliponicultor", "O meliponiculor é um usuário, que deseja utilizar o app.", $sprite="users")
+System_Boundary(greenbee, "Sistema de gerenciamento de Meliponário (GreenBee)"){
+  Container(frame, "Frameworks","Ionic e Angular", "Fornece todas as funcionalidades do GreenBee aos clientes.", $sprite="ionic")
+  Container(api, "Greenbee API", "Java e Spring Boot", "Fornece funcionalidade do GreenBee via API JSON/HTTPS.", $sprite="java")
+  ContainerDb(db, "Banco de Dados", "MongoDB Schema", "Armazena informações referente ao meliponário.", $sprite="mongodb")
+  
+  Rel(frame, api, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(api, db, "Lê e escreve em")
+}
+Rel(client, frame, "Vê as informações armazenadas referente a gestão do  meliponário, e insere novos dados. ")
+
+
+
+System_Boundary(firebase, "Plataforma Firebase"){
+ 
+  Container(api_fire, "Firebase API", "", "Fornece funcionalidade do Firebase para autenticação e envio de notificações via API JSON/HTTPS.")
+  Rel(api_fire, api, "Requisiçoes via API")
+}
+@enduml

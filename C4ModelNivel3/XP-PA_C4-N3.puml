@@ -1,0 +1,132 @@
+@startuml Level3
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!define MATERIAL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/material
+!define FirebasePuml https://raw.githubusercontent.com/k2wanko/firebase-icons-plantuml/master/plantuml
+!includeurl FirebasePuml/FirebaseCommon.puml
+!includeurl FirebasePuml/FirebaseAll.puml
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/mongodb.puml
+!include DEVICONS2/spring.puml
+!include FONTAWESOME/users.puml
+!include FONTAWESOME/project_diagram.puml
+!include MATERIAL/mail.puml
+!include MATERIAL/collections_bookmark.puml
+!include MATERIAL/monetization_on.puml
+
+title Diagrama de componentes para o Sistema gerenciamento de meliponário (GreenBee)
+
+SHOW_PERSON_OUTLINE()
+LAYOUT_LEFT_RIGHT()
+
+Container(frame, "Frameworks","Ionic e Angular", "Fornece todas as funcionalidades do GreenBee aos clientes.", $sprite="ionic")
+
+Container_Boundary(api, "GreenBee API"){
+  'Login
+  Component(login, "Controlador de Login", "Spring MVC Rest Controller", "Oferece ao meliponicultor o login para acesso ao app")
+  Component(cpLogin, "Componente de Login", "Spring Bean", "Forcene funcionalidades de login", $sprite="spring")
+ 
+  Component(dash, "Controlador de Dashboard", "Spring MVC Rest Controller", "Oferecer ao meliponicultor um resumo da gestão do meliponário.")
+
+  Component(meliponario, "Controlador de Meliponários", "Spring MVC Rest Controller", "Permite ao usuário informar dados do meliponário.")
+  Component(meliponicultor, "Controlador de Meliponicultor", "Spring MVC Rest Controller", "Permite ao usuário informar os dados pessoais de um meliponicultor.")
+  Component(enxames, "Controlador de Enxames", "Spring MVC Rest Controller", "Permite o usuário inserir novos enxames ou manipular o já cadastrados.")
+  Component(especies, "Controlador de Especies", "Spring MVC Rest Controller", "Permite ao usuário inserir novas espécies a serem manejadas, ou manipular as já cadastradas.")
+  Component(modeloCaixas, "Controlador de Modelo de Caixas", "Spring MVC Rest Controller", "Permite ao usuário inserir novos modelos de caixa a serem utilizadas, ou manipular as já cadastradas.")
+  Component(financeiro, "Controlador do Financeiro", "Spring MVC Rest Controller", "Permite ao usuário a inserção e manipulação de receitas e despesas.")
+  Component(manejo, "Controlador de Manejo", "Spring MVC Rest Controller", "Permite ao usuário adicionar/remover atividades de manejo em exames.")
+  Component(agenda, "Controlador de Agenda", "Spring MVC Rest Controller", "Permite ao usuário inserir e manipular compromisso na agenda.")
+  Component(cNft, "Componente de Notificação", "Spring MVC Rest Controller", "Envia notificações ao usuário", $sprite="spring")
+
+  Component(cpMeliponario, "Componente de Meliponário", "Spring Bean", "Forcene funcionalidades relacionadas ao melipnário.", $sprite="spring")
+  Component(cpMeliponicultor, "Componente de Meliponicultor", "Spring Bean", "Forcene funcionalidades relacionadas ao melipnicultor.", $sprite="spring")
+  Component(cpEnxame, "Componente de Enxame", "Spring Bean", "Forcene funcionalidades relacionadas ao enxame.", $sprite="spring")
+  Component(cpEspecie, "Componente de Espécies Manejadas", "Spring Bean", "Forcene funcionalidades relacionadas as espécies manejadas.", $sprite="spring")
+  Component(cpCaixa, "Componente de Modelos de caixa", "Spring Bean", "Forcene funcionalidades relacionadas ao Modelo Caixa.", $sprite="spring")
+  Component(cpFin, "Componente de Financeiro", "Spring Bean", "Forcene funcionalidades relacionadas ao Financeiro.", $sprite="spring")
+  Component(cpManejo, "Componente de Manejo", "Spring Bean", "Forcene funcionalidades relacionadas ao manejo.", $sprite="spring")
+  Component(cpAgenda, "Componente de Agenda", "Spring Bean", "Forcene funcionalidades relacionadas a Agenda.", $sprite="spring")
+
+  Component(cpFacadeFBAuth, "Facade para Firebase Authentication", "Spring Bean", "Uma fachada para serviço de autenticaçao do firebase.", $sprite="spring")
+  Component(cpFacadeFBFirestore, "Facade para Firebase Firestore", "Spring Bean", "Uma fachada para serviço de Base de dados do firebase.", $sprite="spring")
+  Component(cpFacadeFBMessaging, "Facade para Firebase Messaging", "Spring Bean", "Uma fachada para serviço de notificações do firebase.", $sprite="spring")
+ 
+ 'Relações
+  Rel(frame, login, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(frame, dash, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(frame, meliponario, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(frame, meliponicultor, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(frame, enxames, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(frame, especies, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(frame, modeloCaixas, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(frame, financeiro, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(frame, manejo, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(frame, agenda, "Faz chamadas de API para", "JSON/HTTPS")
+
+  Rel(login, cpLogin, "Usa")
+  Rel(dash, cpMeliponario, "Usa")
+  Rel(dash, cpEnxame, "Usa")
+  Rel(dash, cpManejo, "Usa")
+  Rel(dash, cpAgenda, "Usa")
+  Rel(dash, cpFin, "Usa")
+
+  Rel(cpFin,cNft , "Usa")
+  Rel(cpAgenda, cNft, "Usa")
+
+  Rel(meliponario, cpMeliponario, "Usa")
+  Rel(meliponicultor, cpMeliponicultor, "Usa")
+  Rel(meliponicultor, cpMeliponario, "Usa")
+  Rel(enxames, cpEnxame, "Usa")
+  Rel(enxames, cpEspecie, "Usa")
+  Rel(especies, cpEspecie, "Usa")
+  Rel(modeloCaixas, cpCaixa, "Usa")
+  Rel(financeiro, cpFin, "Usa")
+  Rel(financeiro, cpMeliponario, "Usa")
+  Rel(manejo, cpManejo, "Usa")
+  Rel(manejo, cpEnxame, "Usa")
+  Rel(agenda, cpAgenda, "Usa")
+  Rel(agenda, cpMeliponario, "Usa")
+  Rel(agenda, cpMeliponicultor, "Usa")
+  Rel(agenda, cpEnxame, "Usa")
+  Rel(agenda, cpManejo, "Usa")
+
+}
+ContainerDb(db, "Banco de Dados", "MongoDB Schema", "Armazena informações referente ao meliponário.", $sprite="mongodb")
+Rel(cpAgenda, db, "Lê e escreve em")
+Rel(cpCaixa, db, "Lê e escreve em")
+Rel(cpEnxame, db, "Lê e escreve em")
+Rel(cpEspecie, db, "Lê e escreve em")
+Rel(cpFin, db, "Lê e escreve em")
+Rel(cpManejo, db, "Lê e escreve em")
+Rel(cpMeliponario, db, "Lê e escreve em")
+Rel(cpMeliponicultor, db, "Lê e escreve em")
+
+
+System_Boundary(firebase, "Plataforma Firebase"){
+  
+  Container(api_fire, "Firebase API", "", "Fornece funcionalidade do Firebase via API JSON/HTTPS.")
+  Authentication(autentication, "Serviço de Autenticação", "Gerencia a autenticação")
+  Messaging(cloudMessage, "Serviço de Envio de Notificações", "Gerencia o envio de notificações")
+  Firestore(firestore, "Database", "Document Database")
+
+  Rel(autentication, api_fire, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(cloudMessage, api_fire, "Faz chamadas de API para", "JSON/HTTPS")
+  Rel(firestore, api_fire, "Faz chamadas de API para", "JSON/HTTPS")
+ 
+}
+
+ 'rel facade
+  Rel(cpLogin, cpFacadeFBAuth, "Usa")
+  Rel(cNft, cpFacadeFBFirestore, "Usa")
+  Rel(cNft, cpFacadeFBMessaging, "Usa")
+
+  Rel(cpFacadeFBAuth, api_fire, "Usa")
+  Rel(cpFacadeFBFirestore, api_fire, "Usa")
+  Rel(cpFacadeFBMessaging, api_fire, "Usa")
+
+@enduml

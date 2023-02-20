@@ -1,0 +1,265 @@
+@startuml Diagrama de Classes GreenBee
+
+class EspeciesCatalogadas {
+    - codigo : String
+    - nomesPopulares : List<String>
+    - nomeCientifico : String
+    - ufLiberado : List<String>
+}
+
+class EspecieManejada {
+    - nomePopular : String
+    - especiesCatalogadas : EspeciesCatalogadas
+}
+
+class ModeloCaixa {
+    - codigo : String
+    - nome : String
+    - tamanho : String
+    - descricao : String
+    + ModeloCaixa(modeloCaixa : ModeloCaixa)
+}
+
+class Meliponario {
+    - codigo : String
+    - nome : String
+    - endereco : Endereco
+    - status : Boolean
+    - logo : Blob
+    - especies : List<EspecieManejada>
+    + Meliponario(meliponario : Meliponario)
+}
+
+class Meliponicultor {
+    - nome : String
+    - cpf : String
+    - endereco : Endereco
+    - meliponario : Meliponario
+    + Meliponicultor(meliponicultor : Meliponicultor)
+}
+
+class Manejo {
+    - enxame : Enxame
+    - tipoManejo : TipoManejo
+    - data : Date
+    - observacao : String
+    - alimentacao : List<Alimentacao>
+    - coleta : List<Coleta>
+    - divisao : Divisao
+    - revisao : Revisao
+    - mudanca : Mudanca
+    - reforco : Reforco
+    - modulo : Modulos
+    - transferencia : Transferencia
+    
+    
+    + Manejo(manejo : Manejo)
+}
+class Coleta {
+    - tipoColeta : List<TipoColeta>
+    - quantidade : Float
+    - descQtd : String
+    - observacao : String
+}
+
+abstract class MovimentacaoFinanceira {
+    - meliponario : Meliponario
+    - dataBase : date
+    - dataMovimento : date
+    - valor : BigDecimal
+    - historico : String
+    - naturezaFinanceira : NaturezaFinanceira
+}
+
+class Endereco {
+    - codigo : String
+    - cep : Long
+    - cidade : String
+    - uf : String
+    - pais : String
+    - rua : String
+    - numero : String
+    - complemento : String
+    - bairro : String
+    - localizacao : String
+    + Endereco(endereco : Endereco)
+}
+
+abstract class Enxame {
+    - codigo : String
+    - especie : EspecieManejada
+    - manejos : List<Manejo>
+}
+
+class NinhoIsca {
+    - dataCaptura : Date
+    - localizacao : String
+    - tamanho : Float
+    - status : String
+    + NinhoIsca(ninhoIsca : NinhoIsca)
+}
+
+class Alimentacao {
+    - tipoAlimentacao : List<TipoAlimentacao>
+    - quantidade : Float
+    - descQtd : String
+    - observacao : String
+}
+
+class Divisao {
+    - descricaoMetodo : String
+    - modeloCaixa : ModeloCaixa
+    - recursoDivisao : List<RecursoDivisao>
+    - observacao : String
+}
+class Revisao {
+    - forcaEnxame : String
+    - avistamentoRainha : Boolean
+    - reservaAlimento : String
+    - umidadeInterna : String
+    - avistamentoForideos : Boolean
+    - postura : String
+    - qtdCapeiras : String 
+    - identificacaoMofo : Boolean
+    - avistamentoLarvas : Boolean
+    - movimentacao : String
+    - observacao : String
+}
+class Mudanca {
+    - meliponario : Meliponario
+    - observacao : String
+}
+class Reforco {
+    - tipoReforco : List<RecursoDivisao>
+    - observacao : String
+    - enxame : Enxame
+}
+class Modulos {
+    - operacao : String
+    - tipo : String
+    - observacao : String
+}
+class Transferencia {
+    - isNinhoIsca : Boolean
+}
+
+enum RecursoDivisao {
+    + DISCO/CELULA CRIA {static}
+    + ABELHAS CAMPEIRAS {static}
+    + MEL {static}
+    + POLEN {static}
+    + valueOf(name : String) : RecursoDivisao {static}
+    + values() : RecursoDivisao[] {static}
+}
+
+enum TipoAlimentacao {
+    + XAROPE {static}
+    + MEL APIS {static}
+    + MEL ASF {static}
+    + POLEN ASF {static}
+    + BOMBOM POLEN {static}
+    + valueOf(name : String) : TipoAlimentacao {static}
+    + values() : TipoAlimentacao[] {static}
+}
+
+enum TipoColeta {
+    + MEL {static}
+    + POLEN {static}
+    + PROPOLIS {static}
+    + CERA {static}
+    + valueOf(name : String) : TipoColeta {static}
+    + values() : TipoColeta[] {static}
+}
+
+class Colmeia {
+    - dataIncorporacao : Date
+    - meliponario : Meliponario
+    - modeloCaixa : ModeloCaixa
+    + Colmeia(enxame : Enxame)
+}
+
+enum TipoManejo {
+    + ALIMENTACAO {static}
+    + COLETA {static}
+    + DIVISAO {static}
+    + REVISAO {static}
+    + MUDANCA {static}
+    + REFORCO {static}
+    + MODULOS {static}
+    + TRANSFERENCIA {static}
+    + valueOf(name : String) : TipoManejo {static}
+    + values() : TipoManejo[] {static}
+}
+
+enum TipoNatureza {
+    + RECEITA {static}
+    + DESPESA {static}
+    + valueOf(name : String) : TipoNatureza {static}
+    + values() : TipoNatureza[] {static}
+}
+
+class NaturezaFinanceira {
+    - codigo : String
+    - descricao : String
+    - tipo : TipoNatureza
+    + NaturezaFinanceira(naturezaFinanceira : NaturezaFinanceira)
+}
+
+class Agenda {
+    - meliponario : Meliponario
+    - meliponicultor : Meliponicultor
+    - data : datetime
+    - descricao : String
+    - enxame : Enxame
+}
+
+
+class Receita {
+    + List<Receita> getReceitas(Meliponario mel,Date in, Date out)
+}
+class Despesa {
+     + List<Despesa> getReceitas(Meliponario mel,Date in, Date out)
+}
+
+Enxame <|-- NinhoIsca
+Enxame <|-- Colmeia
+
+Revisao <|-- Transferencia  
+MovimentacaoFinanceira <|-- Receita
+MovimentacaoFinanceira <|-- Despesa
+
+Meliponario --> "-endereco" Endereco
+Meliponicultor --> "-endereco" Endereco
+MovimentacaoFinanceira --> "-naturezaFinanceira" NaturezaFinanceira
+Colmeia --> "-caixa" ModeloCaixa
+Colmeia --> "-meliponario" Meliponario
+Meliponicultor --> "-meliponario" Meliponario
+EspecieManejada --> "-especie" EspeciesCatalogadas
+Enxame --> "-especie" EspecieManejada
+MovimentacaoFinanceira --> "-meliponario" Meliponario
+Agenda --> Meliponario
+Agenda --> Meliponicultor
+Agenda --> Enxame
+
+Divisao --> ModeloCaixa
+Manejo --> Transferencia
+Manejo --> Modulos
+Manejo --> Reforco
+Manejo --> Mudanca
+Manejo --> Revisao
+Manejo --> Divisao
+
+Manejo "1" *-- "many" Coleta :contains
+Manejo "1" *-- "many" Alimentacao :contains
+
+Enxame "1" *-- "many" Manejo  :contains
+Meliponario "many" *-- "many" EspecieManejada : contains
+
+TipoNatureza ..+ NaturezaFinanceira
+TipoManejo ..+ Manejo
+TipoAlimentacao ..+ Alimentacao
+TipoColeta ..+ Coleta
+RecursoDivisao ..+ Divisao
+
+
+@enduml

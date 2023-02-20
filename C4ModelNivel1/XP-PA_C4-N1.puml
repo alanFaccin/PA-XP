@@ -1,0 +1,20 @@
+@startuml Level1
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Diagrama de contexto para o Sistema de GreenBee
+
+SHOW_PERSON_OUTLINE()
+
+Person(user, "Meliponicultor", "O meliponiculor é um usuário, que deseja utilizar o app.")
+System(GreenBee, "GreenBee", "Proporciona ao usuário uma gestão completa do meliporário.")
+Rel(user, GreenBee, "Visualiza, edita e inclui informações pertinentes ao meliponário")
+
+
+System_Ext(push, "Sistema de Notificação", "Plataforma de gerenciamento de notificações.")
+Rel(push, user, "Notifica")
+Rel(GreenBee, push, "Processa Notificação")
+
+System_Ext(BackEnd, "BackEnd", "Armazena todas as informações cadastrais e dados a serem publicados.")
+Rel(GreenBee, BackEnd, "Obtem informações")
+@enduml
